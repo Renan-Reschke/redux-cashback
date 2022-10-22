@@ -1,3 +1,6 @@
+const redux = require("redux")
+const { createStore, combineReducers } = redux
+
 const criarContrato = (nome, taxa) => {
     return {
         type: "CRIAR_CONTRATO",
@@ -53,3 +56,24 @@ const contratos = (contratosAtuais = [], acao) => {
     }
     return contratosAtuais
 }
+
+const todosOsReducers = combineReducers({
+    contratos,
+    caixa,
+    historicoDePedidosDeCashback
+})
+
+const store = createStore(todosOsReducers)
+
+store.dispatch(criarContrato("Jose", 100))
+console.log("Contrato de Jose criado. Contratos atuais: ", store.getState().contratos)
+store.dispatch(criarContrato("Maria", 200))
+console.log("Contrato de Maria criado. Contratos atuais: ", store.getState().contratos)
+
+store.dispatch(solicitarCashback("Maria", 10))
+console.log("Cashback de Maria solicitado. Caixa: ", store.getState().caixa)
+store.dispatch(solicitarCashback("Jose", 20))
+console.log("Cashback de Jose solicitado. Caixa: ", store.getState().caixa)
+
+store.dispatch(cancelarContrato("Maria"))
+console.log("Contrato de Jose cancelado. Contratos atuais: ", store.getState().contratos)
